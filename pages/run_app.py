@@ -1,6 +1,7 @@
 import streamlit as st
 import database_agent
 import whisper
+from datetime import datetime
 
 app = database_agent.create_graph()
 
@@ -15,6 +16,13 @@ if prompt:
     if prompt.audio:
         model = whisper.load_model("small")
         prompt.text = model.transcribe(prompt.audio)
+
+    st.session_state["agent_execution_log"] = {
+        "executado_em": datetime.now().isoformat(timespec="seconds"),
+        "prompt": prompt.text,
+        "verificacao": None,
+        "tool_logs": [],
+    }
         
     with st.chat_message("user"):
         st.write(prompt.text)
@@ -30,6 +38,10 @@ if prompt:
                 # 1. Quando o nó verificador terminar
                 if "verificador" in evento:
                     verif = evento["verificador"]["verifier_result"]
+                    st.session_state["agent_execution_log"]["verificacao"] = {
+                        "alarme": verif.alarme,
+                        "justificativa": verif.justificativa_alarme,
+                    }
                     if verif.alarme == 0:
                         st.write("🛡️ **Segurança:** Prompt aprovado (Alarme: 0)")
                     else:
@@ -40,6 +52,7 @@ if prompt:
                 if "recomendador" in evento:
                     st.write("🔍 **Banco de Dados:** Consulta SQL concluída.")
                     resultado_final = evento["recomendador"]["recommender_result"]
+                    st.session_state["agent_execution_log"]["tool_logs"] = evento["recomendador"].get("tool_logs", [])
                     status.update(label="Recomendações prontas!", state="complete", expanded=False)
 
         # 3. Exibição visual dos pratos recomendados fora do st.status
@@ -51,3 +64,5 @@ if prompt:
                     col1.write(item.justificativa)
                     col2.metric("Preço", f"R$ {item.preco:.2f}")
                     col2.write(f"⭐ {item.avaliacao_est:.1f}")
+
+            st.page_link("pages/tools_log.py", label="Ver chamadas das tools", icon=":material/manage_search:")
