@@ -14,6 +14,15 @@ O usuário descreve o que deseja comer — por exemplo, “quero um hambúrguer 
 4. consulta apenas itens disponíveis e relaciona cardápio, estabelecimento e avaliações;
 5. devolve uma lista tipada contendo item, estabelecimento, preço, avaliação e justificativa.
 
+O sistema leva em conta os seguintes critérios para recomendação:
+
+    - Proximidade com o usuário;
+    - Descrição do item;
+    - Restrições dietéticas;
+    - Preço do item;
+    - Avaliação do item;
+    - Avaliação do merchant.
+
 A interface também aceita entrada por áudio e utiliza Whisper para transcrição antes de encaminhar o pedido ao fluxo de agentes.
 
 ## Arquitetura e fluxo

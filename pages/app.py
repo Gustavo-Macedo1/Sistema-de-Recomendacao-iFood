@@ -8,7 +8,7 @@ col1, col2 = st.columns([0.15, 0.85])
 with col1:
     st.image("assets/ifood-logo-brandlogos.net_.png", width=150)
 with col2:
-    st.title("Recomendação de Refeições - iFood")
+    st.title("Sistema de Recomendação de Refeições - iFood")
     st.subheader("Sistema Multiagente Completo")
 
 st.markdown("""
@@ -26,7 +26,7 @@ O sistema consiste de:
 - A presente interface construída com Streamlit.
 
 A saída do sistema é estruturada (com Pydantic) e representa uma lista de recomendações de itens com base no pedido do usuário. Essa saída é _plug-and-play_,
-estando pronta para implementação em estruturas que esperam saídas estruturadas, como o FastAPI.
+estando pronta para implementação em estruturas que esperam saídas estruturadas para deploy, como o FastAPI.
 
 ---
 """)
